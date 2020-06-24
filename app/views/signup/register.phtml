@@ -1,0 +1,16 @@
+<?php outputNavBar($this); ?>
+
+<div class="mt-4 alert alert-<?php echo $success === true ? 'success' : 'danger'; ?>">
+    <?php echo $message; ?>
+</div>
+
+<?php
+    if($success === true)
+    {
+        echo $this->tag->linkTo(['/', 'Go back', 'class' => 'btn btn-primary']);
+    }
+    else
+    {
+        echo $this->tag->linkTo(['/signup', 'Go back', 'class' => 'btn btn-primary']);
+    }
+?>

@@ -1,0 +1,44 @@
+<?php outputNavBar($this); ?>
+
+<h2 class="text-center">Register using this form</h2>
+
+<?php
+echo $this->tag->form(
+    [
+        "signup/register",
+        "method" => "post",
+        "class" => ""
+    ]
+);
+?>
+
+<div class="form-group">
+    <label for="name">Name</label>
+    <?php echo $this->tag->textField(
+        [
+            "name",
+            "class" => "form-control",
+            "placeholder" => "Enter Your Username"
+        ]); ?>
+</div>
+
+<div class="form-group">
+    <label for="email">Email</label>
+    <?php echo $this->tag->emailField(
+        [
+            "email",
+            "class" => "form-control",
+            "placeholder" => "Enter Your Email"
+        ]); ?>
+</div>
+
+<p>
+    <?php echo $this->tag->submitButton(
+        [
+            "Register",
+            "class" => "btn btn-primary"
+        ]
+    ); ?>
+</p>
+
+<?php echo $this->tag->endForm(); ?>
