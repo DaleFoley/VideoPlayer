@@ -1,5 +1,9 @@
 <?php
-    outputNavBar($this);
+    if($this->session->get(IS_LOGGED_IN))
+    {
+        header('Location: /');
+        exit();
+    }
 ?>
 
 <h2 class="text-center">Login using this form</h2>

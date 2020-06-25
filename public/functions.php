@@ -1,5 +1,11 @@
 <?php
 
+function startsWith($haystack, $needle)
+{
+    $length = strlen($needle);
+    return (substr($haystack, 0, $length) === $needle);
+}
+
 function outputLoggedOutNavBar()
 {
     echo '<nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -25,17 +31,25 @@ function outputLoggedOutNavBar()
         </nav>';
 }
 
-function outputLoggedInNavBar()
+function outputLoggedInNavBar($container)
 {
+    $username = "";
+    $user = $container->session->get(USER);
+
+    if($user !== null)
+    {
+        $username = "Logged In User: " . $user->name;
+    }
+
     echo '<nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand fas fa-video" href="/">
-                Video Player
+                Video Player ' . $username . '
             </a>
-
+            
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+            
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -48,10 +62,10 @@ function outputLoggedInNavBar()
 
 function outputNavBar($container)
 {
-    $isLoggedIn = $$container->session->get(IS_LOGGED_IN);
+    $isLoggedIn = $container->session->get(IS_LOGGED_IN);
     if($isLoggedIn)
     {
-        outputLoggedInNavBar();
+        outputLoggedInNavBar($container);
     }
     else
     {

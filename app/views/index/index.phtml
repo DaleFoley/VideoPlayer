@@ -1,2 +1,38 @@
-<?php
-outputNavBar($this);
+<?php if(!$this->session->get(IS_LOGGED_IN)): ?>
+    <p>Login to view videos and modify your uploaded videos.</p>
+<?php else: ?>
+    <style type="text/css">
+        .list-group{
+            max-height: 800px;
+            margin-bottom: 10px;
+            overflow:scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+
+    <p></p>
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="embed-responsive embed-responsive-16by9">
+                <video class="embed-responsive-item"
+                        src="http://localhost:8000/videos" controls>
+                    Browser does not support HTML5 video playback.
+                </video>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <button type="button" class="mb-4 btn btn-primary btn-block"
+                    onclick="window.location = '/videos/upload'">Upload</button>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <img src="https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg"
+                         alt="test"
+                         class="img-thumbnail">
+                </li>
+            </ul>
+        </div>
+    </div>
+<?php endif; ?>

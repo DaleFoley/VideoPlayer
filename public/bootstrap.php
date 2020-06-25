@@ -87,5 +87,6 @@ try
 }
 catch (\Exception $e)
 {
+    //TODO: Logging, FYI average user should not see these details.
     echo "Exception Raised On Line " . $e->getLine() . ": " . $e->getMessage();
 }

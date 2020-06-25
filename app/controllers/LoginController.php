@@ -20,6 +20,10 @@ class LoginController extends Controller
             else
             {
                 $this->session->set(IS_LOGGED_IN, true);
+                $this->session->set(USER, $foundUser);
+
+                $userVideos = $this->getUserVideos($foundUser->id);
+                $this->session->set(USER_VIDEOS, $userVideos);
             }
 
             $this->view->message = $message;
@@ -31,7 +35,7 @@ class LoginController extends Controller
         $user = Users::findFirst(
             [
                 'conditions'  => 'name = :name: AND email = :email:',
-                'bind'        => [
+                'bind' => [
                     'name' => $username,
                     'email' => $email
                 ],
@@ -39,5 +43,18 @@ class LoginController extends Controller
         );
 
         return $user;
+    }
+
+    public function getUserVideos($userID)
+    {
+        $videos = UserVideos::find(
+            [
+                'conditions' => 'user_id = :user_id:',
+                'bind' => [
+                    'user_id' => $userID
+                ],
+            ]
+        );
+        return $videos;
     }
 }
