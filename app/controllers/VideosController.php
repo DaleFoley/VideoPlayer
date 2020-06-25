@@ -10,13 +10,15 @@ class VideosController extends Controller
         //TODO: Use routing to get video by ID.
         $videoPath = BASE_PATH . "/uploaded_videos/";
         $video = null;
-        //$video = fopen(BASE_PATH . "/uploaded_videos/", 'rb');
+
+        //Uncomment to test
+        $video = fopen($videoPath, 'rb');
 
         if(!$video === false)
         {
             ob_get_clean();
 
-            $fileSize = filesize(BASE_PATH . "/uploaded_videos/");
+            $fileSize = filesize($videoPath);
 
             $end = $fileSize - 1;
 
@@ -40,8 +42,24 @@ class VideosController extends Controller
     {
         if ($this->request->hasFiles() == true)
         {
-            //TODO: Process uploaded video, ensure videos are only uploaded.
+            //TODO: Process uploaded video, ensure mp4 videos are only uploaded for now.
             $uploadedFiles = $this->request->getUploadedFiles();
+            $videoFile = $uploadedFiles[0];
+            $videoMIME = $videoFile->getType();
+
+            if($videoMIME === "video/mp4")
+            {
+                $userID = $this->session->get(USER)->id;
+                $userName = $this->session->get(USER)->name;
+
+                $pathUserVideos = PATH_VIDEO_UPLOAD . '/' . $userID . '_' . $userName;
+                if(!file_exists($pathUserVideos))
+                {
+                    mkdir($pathUserVideos);
+                }
+            }
+
+            $break = true;
         }
     }
 
