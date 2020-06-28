@@ -8,7 +8,7 @@ class VideosController extends Controller
     public function indexAction()
     {
         //TODO: Use routing to get video by ID.
-        $videoPath = BASE_PATH . "/uploaded_videos/";
+        $videoPath = BASE_PATH . "/uploaded_videos/epic_wallbang_headshot.mp4";
         $video = null;
 
         //Uncomment to test
@@ -82,7 +82,10 @@ class VideosController extends Controller
 
     private function end($video)
     {
-        fclose($video->stream);
+        if($video !== null)
+        {
+            fclose($video->stream);
+        }
         exit;
     }
 }
