@@ -47,7 +47,7 @@ class VideosController extends Controller
             $videoFile = $uploadedFiles[0];
             $videoMIME = $videoFile->getType();
 
-            if($videoMIME === "video/mp4")
+            if($videoMIME === MP4_MIME)
             {
                 $userID = $this->session->get(USER)->id;
                 $userName = $this->session->get(USER)->name;
@@ -84,7 +84,7 @@ class VideosController extends Controller
     {
         if($video !== null)
         {
-            fclose($video->stream);
+            fclose($video);
         }
         exit;
     }
