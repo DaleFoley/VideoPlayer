@@ -2,7 +2,7 @@
 
 use Phalcon\Mvc\Controller;
 
-class VideosController extends Controller
+class VideosController extends BaseController
 {
     //TODO: Async video streaming
     public function indexAction()

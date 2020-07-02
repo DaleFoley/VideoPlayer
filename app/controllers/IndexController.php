@@ -2,11 +2,9 @@
 
 use Phalcon\Mvc\Controller;
 
-class IndexController extends Controller
+class IndexController extends BaseController
 {
     public function indexAction()
     {
-        //TODO: Check logged in, if logged in add ability to add videos to playlist
-
     }
 }

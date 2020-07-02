@@ -2,7 +2,7 @@
 
 use Phalcon\Mvc\Controller;
 
-class ErrorController extends Controller
+class ErrorController extends BaseController
 {
     public function indexAction()
     {
