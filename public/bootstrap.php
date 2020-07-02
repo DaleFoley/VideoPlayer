@@ -8,6 +8,7 @@ use Phalcon\Url;
 use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
 use Phalcon\Db\Adapter\Pdo\Mysql;
+use Phalcon\Assets\Asset\Js;
 
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');

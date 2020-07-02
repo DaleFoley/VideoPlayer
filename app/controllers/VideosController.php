@@ -11,7 +11,6 @@ class VideosController extends BaseController
         $videoPath = BASE_PATH . "/uploaded_videos/epic_wallbang_headshot.mp4";
         $video = null;
 
-        //Uncomment to test
         $video = fopen($videoPath, 'rb');
 
         if(!$video === false)
