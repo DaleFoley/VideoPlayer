@@ -8,7 +8,7 @@ class BaseController extends Controller
     public function initialize()
     {
         $customJS = new Js(
-            '/js/custom.js',
+            '/js/functions.js',
             true,
             false,
             [],

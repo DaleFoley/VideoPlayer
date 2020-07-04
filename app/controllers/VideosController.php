@@ -1,9 +1,26 @@
 <?php
 
 use Phalcon\Mvc\Controller;
+use Phalcon\Assets\Asset\Js;
 
 class VideosController extends BaseController
 {
+    public function initialize()
+    {
+        parent::initialize();
+
+        $customJS = new Js(
+            '/js/views/upload/custom.js',
+            true,
+            false,
+            [],
+            VERSION,
+            false
+        );
+
+        $this->assets->addAssetByType('js', $customJS);
+    }
+
     //TODO: Async video streaming
     public function indexAction()
     {
@@ -51,7 +68,7 @@ class VideosController extends BaseController
                 $userID = $this->session->get(USER)->id;
                 $userName = $this->session->get(USER)->name;
 
-                $pathUserVideos = PATH_VIDEO_UPLOAD . '/' . $userID . '_' . $userName;
+                $pathUserVideos = PATH_VIDEO_UPLOAD . $userID . '_' . $userName;
                 if(!file_exists($pathUserVideos))
                 {
                     mkdir($pathUserVideos);
