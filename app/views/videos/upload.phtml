@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-12 col-xs-12">
         <p>Choose video file to upload:</p>
         <form enctype="multipart/form-data">
             <div class="form-group">
@@ -8,16 +8,21 @@
             <button type="button"
                     id="submitButton"
                     name="submitButton"
-                    class="btn btn-primary"
-                    onclick="uploadFile(formElement, progressBarElement)">Submit</button>
-            <div class="progress">
+                    class="btn btn-primary">Submit</button>
+            <p></p>
+            <div class="progress" style="height: 35px">
                 <div class="progress-bar"
                      role="progressbar"
-                     style="width: 0%;"
+                     style="width: 0;"
                      aria-valuenow="0"
                      aria-valuemin="0"
-                     aria-valuemax="100">0%</div>
+                     aria-valuemax="100">
+                </div>
+                <span id="complete-label"
+                        class="justify-content-center d-flex position-absolute w-100 mt-3">
+                </span>
             </div>
+
         </form>
     </div>
 </div>
