@@ -1,12 +1,7 @@
-function uploadFile(form, progressBar, completeLabel, submitButton, url)
+//This function takes advantage of the simplicity of the FormData API for uploading.
+//This is less flexible than pure AJAX, and the result cannot be stringified.
+function uploadFileFormData(form, progressBar, completeLabel, submitButton, url)
 {
-    if(form == null) return false;
-    if(progressBar == null) return false;
-    if(url == null) return false;
-
-    if(form.length === 0) return false;
-    if(progressBar.length === 0) return false;
-
     let isDisplayCompletionText = completeLabel != null;
     let isSubmitButtonPresent = submitButton != null;
 
@@ -27,7 +22,7 @@ function uploadFile(form, progressBar, completeLabel, submitButton, url)
         $(submitButton).prop('disabled', 'true');
     }
 
-    $.ajax({
+    return $.ajax({
         url: url,
         type: 'POST',
         data: formData,
@@ -67,4 +62,10 @@ function uploadFile(form, progressBar, completeLabel, submitButton, url)
             return xhr;
         }
     });
+}
+
+//TODO: Add different ways to upload file data, i.e pure AJAX as opposed to using FormData API.
+function uploadFile(form, progressBar, completeLabel, submitButton, url)
+{
+    return uploadFileFormData(form, progressBar, completeLabel, submitButton, url);
 }

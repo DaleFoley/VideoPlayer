@@ -73,9 +73,15 @@ class VideosController extends BaseController
                 {
                     mkdir($pathUserVideos);
                 }
-            }
 
-            $break = true;
+                $uploadedFileName = $videoFile->getName();
+                $isUploadedFileMoved = $videoFile->moveTo($pathUserVideos . '/' . $uploadedFileName);
+
+                if(!$isUploadedFileMoved)
+                {
+                    //TODO: File failed to upload
+                }
+            }
         }
     }
 
