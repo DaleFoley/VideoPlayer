@@ -5,6 +5,8 @@ use Phalcon\Assets\Asset\Js;
 
 class VideosController extends BaseController
 {
+    const BUFFER_BYTES = 1024;
+
     public function initialize()
     {
         parent::initialize();
@@ -21,7 +23,6 @@ class VideosController extends BaseController
         $this->assets->addAssetByType('js', $customJS);
     }
 
-    //TODO: Async video streaming
     public function indexAction()
     {
         //TODO: Use routing to get video by ID.
@@ -38,9 +39,8 @@ class VideosController extends BaseController
 
             $end = $fileSize - 1;
 
-            //TODO: Set 1024 as a constant.
-            $buffer = (int)($end / 1024);
-            $remainder = $end % 1024;
+            $buffer = (int)($end / self::BUFFER_BYTES);
+            $remainder = $end % self::BUFFER_BYTES;
 
             if($fileSize !== null)
             {
@@ -58,7 +58,6 @@ class VideosController extends BaseController
     {
         if ($this->request->hasFiles() == true)
         {
-            //TODO: Process uploaded video, ensure mp4 videos are only uploaded for now.
             $uploadedFiles = $this->request->getUploadedFiles();
             $videoFile = $uploadedFiles[0];
             $videoMIME = $videoFile->getType();
@@ -68,28 +67,75 @@ class VideosController extends BaseController
                 $userID = $this->session->get(USER)->id;
                 $userName = $this->session->get(USER)->name;
 
-                $pathUserVideos = PATH_VIDEO_UPLOAD . $userID . '_' . $userName;
-                if(!file_exists($pathUserVideos))
+                $directoryUserVideo = $userID . '_' . $userName;
+
+                $pathUserVideos = VIDEO_UPLOAD_DIRECTORY . $directoryUserVideo;
+                $pathFileSystemUserVideos = BASE_PATH . $pathUserVideos;
+                if(!file_exists($pathFileSystemUserVideos))
                 {
-                    mkdir($pathUserVideos);
+                    mkdir($pathFileSystemUserVideos);
                 }
 
                 $uploadedFileName = $videoFile->getName();
-                $isUploadedFileMoved = $videoFile->moveTo($pathUserVideos . '/' . $uploadedFileName);
+                $isUploadedFileMoved = $videoFile->moveTo($pathFileSystemUserVideos . '\\' . $uploadedFileName);
 
                 if(!$isUploadedFileMoved)
                 {
                     //TODO: File failed to upload
+                    $break = true;
+                }
+
+                $directoryUserThumbnails = $pathFileSystemUserVideos . THUMBNAILS_DIRECTORY;
+                if(!file_exists($directoryUserThumbnails))
+                {
+                    mkdir($directoryUserThumbnails);
+                }
+
+                $thumbnailImageName = str_replace(".mp4", ".png", $uploadedFileName);
+                $pathVideoThumbnail = $directoryUserThumbnails . $thumbnailImageName;
+
+                if(!file_exists($pathVideoThumbnail))
+                {
+                    $ffmpegCommand = PATH_FFMPEG_WINDOWS . " -i " . $pathFileSystemUserVideos . '\\' . $uploadedFileName . " -vf \"select=eq(n\,34)\" -vframes 1 " . $pathVideoThumbnail;
+                    shell_exec($ffmpegCommand); //TODO: This needs to executed in a non-blocking manner.
+                }
+
+                $videoFileSize = $videoFile->getSize();
+                $saveResult = $this->insertUserVideoRow($userID,
+                    $uploadedFileName,
+                    $pathUserVideos,
+                    $videoFileSize,
+                    $thumbnailImageName);
+
+                if($saveResult === false)
+                {
+                    //TODO: Error handling.
+                    $break = true;
                 }
             }
         }
+    }
+
+    private function insertUserVideoRow($userID, $videoName, $path, $fileSize, $thumbnail)
+    {
+        $userVideoToBeInserted = new UserVideos();
+        $userVideoToBeInserted->user_id = $userID;
+        $userVideoToBeInserted->name = $videoName;
+        $userVideoToBeInserted->path = $path;
+        $userVideoToBeInserted->size = $fileSize;
+        $userVideoToBeInserted->thumbnail = $thumbnail;
+        $userVideoToBeInserted->length = "0:00"; //TODO: Get video length
+
+        $saveResult = $userVideoToBeInserted->save();
+
+        return $saveResult;
     }
 
     private function stream($buffer, $video, $remainder)
     {
         set_time_limit(0);
 
-        for($i = 0; $i != 1024; ++$i)
+        for($i = 0; $i != self::BUFFER_BYTES; ++$i)
         {
             $data = fread($video, $buffer);
             echo $data;
