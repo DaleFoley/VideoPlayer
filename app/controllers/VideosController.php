@@ -26,7 +26,7 @@ class VideosController extends BaseController
     public function indexAction()
     {
         //TODO: Use routing to get video by ID.
-        $videoPath = BASE_PATH . "/uploaded_videos/epic_wallbang_headshot.mp4";
+        $videoPath = BASE_PATH . "/uploaded_videos/1_Dale/low_quality_test.mp4";
         $video = null;
 
         $video = fopen($videoPath, 'rb');
@@ -37,7 +37,7 @@ class VideosController extends BaseController
 
             $fileSize = filesize($videoPath);
 
-            $end = $fileSize - 1;
+            $end = $fileSize;
 
             $buffer = (int)($end / self::BUFFER_BYTES);
             $remainder = $end % self::BUFFER_BYTES;

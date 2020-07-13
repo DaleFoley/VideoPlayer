@@ -2,10 +2,10 @@
 
 use Phalcon\Mvc\Controller;
 
-class ErrorController extends BaseController
+class ErrorController extends Controller
 {
     public function indexAction()
     {
-
+        exit();
     }
 }

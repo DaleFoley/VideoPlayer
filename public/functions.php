@@ -1,9 +1,34 @@
 <?php
 
+use Phalcon\Logger\Adapter\Stream;
+use Phalcon\Logger\AdapterFactory;
+use Phalcon\Logger\LoggerFactory;
+
 function startsWith($haystack, $needle)
 {
     $length = strlen($needle);
     return (substr($haystack, 0, $length) === $needle);
+}
+
+function globalExceptionHandler($ex)
+{
+    $adapters = [
+        "error"  => new Stream(BASE_PATH . "/error.log"),
+    ];
+
+    $adapterFactory = new AdapterFactory();
+    $loggerFactory  = new LoggerFactory($adapterFactory);
+
+    $logger = $loggerFactory->newInstance('logger', $adapters);
+
+    $exceptionMessage = $ex->getMessage();
+    $exceptionStackTrace = $ex->getTraceAsString();
+
+    $exceptionMessageToLog = $exceptionMessage . "\n" . $exceptionStackTrace;
+    $logger->error($exceptionMessageToLog);
+
+    header('Location: /error');
+    exit();
 }
 
 function outputLoggedOutNavBar()

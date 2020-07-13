@@ -24,8 +24,10 @@ class IndexController extends BaseController
                 $pathVideoThumbnail = VIDEO_UPLOAD_DIRECTORY . $userID . "_" . $userName . THUMBNAILS_DIRECTORY .
                     $videoThumbnail;
 
-                $thumbnailBase64Data = base64_encode(file_get_contents(BASE_PATH . $pathVideoThumbnail));
+                $thumbnailContents = file_get_contents(BASE_PATH . $pathVideoThumbnail);
+                $thumbnailBase64Data = base64_encode($thumbnailContents);
 
+                //TODO: Get MIME type.
                 $this->view->videosList .= "<img src=\"data:image/png;base64, $thumbnailBase64Data\"
                          alt=\"$videoFileName\"
                          class=\"img-thumbnail\"
