@@ -6,7 +6,7 @@ DEFINE('USER_VIDEOS', 'userVideos');
 DEFINE('VIDEO_UPLOAD_DIRECTORY', "\uploaded_videos\\");
 DEFINE('THUMBNAILS_DIRECTORY', '\thumbnails\\');
 DEFINE('MP4_MIME', 'video/mp4');
-DEFINE('VERSION', '1.0');
+DEFINE('VERSION', '1.1');
 DEFINE('PATH_FFMPEG_WINDOWS', APP_PATH . "\\ffmpeg\\win32\\ffmpeg.exe");
 DEFINE('PATH_FFPLAY_WINDOWS', APP_PATH . "\\ffmpeg\\win32\\ffplay.exe");
 DEFINE('PATH_FFPROBE_WINDOWS', APP_PATH . "\\ffmpeg\\win32\\ffprobe.exe");

@@ -4,6 +4,7 @@ use Phalcon\Loader;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
+use Phalcon\Mvc\Router;
 use Phalcon\Url;
 use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
@@ -18,9 +19,6 @@ define('APP_PATH', BASE_PATH . '/app');
 require_once BASE_PATH . '/config.inc';
 require_once BASE_PATH . '/public/strings.php';
 require_once BASE_PATH . '/public/functions.php';
-
-//Set a catch all exception handler for any unknowns.
-set_exception_handler('globalExceptionHandler');
 
 $loader = new Loader();
 
@@ -46,11 +44,14 @@ $container->set(
 $container->set(
     'logger',
     function () {
-        $adapter = new LoggingStream(BASE_PATH . "/debug.log");
+        $debugAdapter = new LoggingStream(BASE_PATH . "/debug.log");
+        $errorAdapter = new LoggingStream(BASE_PATH . "/error.log");
+
         $logger  = new Logger(
             'messages',
             [
-                'main' => $adapter,
+                'debug' => $debugAdapter,
+                'error' => $errorAdapter
             ]
         );
 

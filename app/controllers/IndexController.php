@@ -1,11 +1,25 @@
 <?php
 
 use Phalcon\Mvc\Controller;
+use Phalcon\Assets\Asset\Js;
 
 class IndexController extends BaseController
 {
     public function indexAction()
     {
+        parent::initialize();
+
+        $customJS = new Js(
+            '/js/views/index/custom.js',
+            true,
+            false,
+            [],
+            VERSION,
+            false
+        );
+
+        $this->assets->addAssetByType('js', $customJS);
+
         if($this->session->get(IS_LOGGED_IN))
         {
             $user = $this->session->get(USER);
@@ -31,7 +45,8 @@ class IndexController extends BaseController
                 $this->view->videosList .= "<img src=\"data:image/png;base64, $thumbnailBase64Data\"
                          alt=\"$videoFileName\"
                          class=\"img-thumbnail\"
-                         id=\"$videoID\">";
+                         id=\"$videoID\"
+                         onclick='loadSelectedVideo(this);'>";
             }
         }
     }

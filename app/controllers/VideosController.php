@@ -23,10 +23,13 @@ class VideosController extends BaseController
         $this->assets->addAssetByType('js', $customJS);
     }
 
-    public function indexAction()
+    public function indexAction($videoID)
     {
-        //TODO: Use routing to get video by ID.
-        $videoPath = BASE_PATH . "/uploaded_videos/1_Dale/low_quality_test.mp4";
+        $userVideo = self::getUserVideo($videoID);
+        $userVideoPath = $userVideo->path;
+        $userVideoName = $userVideo->name;
+
+        $videoPath = BASE_PATH . $userVideoPath . '\\' . $userVideoName;
         $video = null;
 
         $video = fopen($videoPath, 'rb');
@@ -129,6 +132,24 @@ class VideosController extends BaseController
         $saveResult = $userVideoToBeInserted->save();
 
         return $saveResult;
+    }
+
+    private function getUserVideo($videoID)
+    {
+        $user = $this->session->get(USER);
+        $userID = $user->id;
+
+        $userVideo = UserVideos::findFirst(
+            [
+                'conditions'  => 'id = :id: AND user_id = :user_id:',
+                'bind'        => [
+                    'id' => $videoID,
+                    'user_id' => $userID
+                ],
+            ]
+        );
+
+        return $userVideo;
     }
 
     private function stream($buffer, $video, $remainder)

@@ -6,6 +6,7 @@ class ErrorController extends Controller
 {
     public function indexAction()
     {
-        exit();
+        $this->view->genericErrorMessage = "Encountered an Error. If this continues please report this to the web admin.\n\n";
+        $this->view->genericErrorMessage .= "webadmin@localhost.com";
     }
 }

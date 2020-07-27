@@ -28,7 +28,6 @@ function globalExceptionHandler($ex)
     $logger->error($exceptionMessageToLog);
 
     header('Location: /error');
-    exit();
 }
 
 function outputLoggedOutNavBar()

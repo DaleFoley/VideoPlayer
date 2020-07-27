@@ -57,5 +57,6 @@ if(isset($invalid) && $invalid === true)
 elseif($this->session->get(IS_LOGGED_IN))
 {
     header('Location: /');
+    exit();
 }
 ?>
