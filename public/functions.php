@@ -10,24 +10,59 @@ function startsWith($haystack, $needle)
     return (substr($haystack, 0, $length) === $needle);
 }
 
-function globalExceptionHandler($ex)
+function createFileOrDirectoryIfNotExists($pathToFileOrDirectory, $mode = 0777, $recursive = true)
 {
-    $adapters = [
-        "error"  => new Stream(BASE_PATH . "/error.log"),
-    ];
+    $isFileOrDirectoryCreated = false;
+    if(!file_exists($pathToFileOrDirectory))
+    {
+        $lengthOfPathToFileOrDirectory = count($pathToFileOrDirectory);
+        $isFileOrDirectoryCreated = mkdir($pathToFileOrDirectory, $mode, $recursive);
+    }
 
-    $adapterFactory = new AdapterFactory();
-    $loggerFactory  = new LoggerFactory($adapterFactory);
+    return $isFileOrDirectoryCreated;
+}
 
-    $logger = $loggerFactory->newInstance('logger', $adapters);
+function extractFrameFromVideo($pathSourceVideo, $pathToExtractedImage, $frame, $dirLogs = "")
+{
+    //TODO: Check path exists, create if doesn't exist function.
+    $isDirLogsEmpty = empty($dirLogs);
 
-    $exceptionMessage = $ex->getMessage();
-    $exceptionStackTrace = $ex->getTraceAsString();
+    if(PHP_OS === "Linux")
+    {
+        if(!$isDirLogsEmpty)
+        {
+            $pathToErrorLogFile = PATH_FFMPEG_LINUX_BASE . LOGS_DIRECTORY . $dirLogs . '\\' . FFMPEG_ERROR_LOG;
+            $pathToDebugLogFile = PATH_FFMPEG_LINUX_BASE . LOGS_DIRECTORY . $dirLogs . '\\' . FFMPEG_DEBUG_LOG;
+        }
+        else
+        {
+            $pathToErrorLogFile = PATH_FFMPEG_LINUX_ERROR_LOG;
+            $pathToDebugLogFile = PATH_FFMPEG_LINUX_DEBUG_LOG;
+        }
 
-    $exceptionMessageToLog = $exceptionMessage . "\n" . $exceptionStackTrace;
-    $logger->error($exceptionMessageToLog);
+        $ffmpegCommand = PATH_FFMPEG_WINDOWS . " -i " . $pathSourceVideo . " -vf \"select=eq(n\,$frame)\" -vframes 1 " .
+            $pathToExtractedImage . " </dev/null >> " . $pathToDebugLogFile . " 2>> " .
+            $pathToErrorLogFile . " &";
+    }
+    else
+    {
+        if(!$isDirLogsEmpty)
+        {
+            $pathToErrorLogFile = PATH_FFMPEG_WINDOWS_BASE . LOGS_DIRECTORY . $dirLogs . '\\' . FFMPEG_ERROR_LOG;
+            $pathToDebugLogFile = PATH_FFMPEG_WINDOWS_BASE . LOGS_DIRECTORY . $dirLogs . '\\' . FFMPEG_DEBUG_LOG;
+        }
+        else
+        {
+            $pathToErrorLogFile = PATH_FFMPEG_WINDOWS_ERROR_LOG;
+            $pathToDebugLogFile = PATH_FFMPEG_WINDOWS_DEBUG_LOG;
+        }
 
-    header('Location: /error');
+        $ffmpegCommand = "START /B CMD /C CALL " . PATH_FFMPEG_WINDOWS . " -i " . $pathSourceVideo .
+            " -vf \"select=eq(n\,$frame)\" -vframes 1 " . $pathToExtractedImage .
+            " >> " . $pathToDebugLogFile . " 2> " . $pathToErrorLogFile;
+    }
+
+    shell_exec($ffmpegCommand);
 }
 
 function outputLoggedOutNavBar()

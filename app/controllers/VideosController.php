@@ -99,8 +99,10 @@ class VideosController extends BaseController
 
                 if(!file_exists($pathVideoThumbnail))
                 {
-                    $ffmpegCommand = PATH_FFMPEG_WINDOWS . " -i " . $pathFileSystemUserVideos . '\\' . $uploadedFileName . " -vf \"select=eq(n\,34)\" -vframes 1 " . $pathVideoThumbnail;
-                    shell_exec($ffmpegCommand); //TODO: This needs to executed in a non-blocking manner.
+                    $pathSourceVideo = $pathFileSystemUserVideos . '\\' . $uploadedFileName;
+                    $logDirectory = $userID . '_' . $userName;
+
+                    extractFrameFromVideo($pathSourceVideo, $pathVideoThumbnail, 1, $logDirectory);
                 }
 
                 $videoFileSize = $videoFile->getSize();
@@ -175,6 +177,6 @@ class VideosController extends BaseController
         {
             fclose($video);
         }
-        exit;
+        exit();
     }
 }
