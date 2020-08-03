@@ -16,7 +16,7 @@
         <div class="col-lg-9">
             <div class="embed-responsive embed-responsive-16by9">
                 <video class="embed-responsive-item"
-                        src="http://localhost:8000/videos/index/0" controls>
+                       <?php echo 'src="' . FQDN . '/videos/index/0" controls>'; ?>
                     Browser does not support HTML5 video playback.
                 </video>
             </div>
@@ -30,7 +30,15 @@
             <ul class="list-group">
                 <li class="list-group-item">
                     <?php
-                        echo $videosList; //TODO: Implement volt templates.
+                        //TODO: Implement volt templates.
+                        if(isset($videosList))
+                        {
+                            echo $videosList;
+                        }
+                        else
+                        {
+                            echo "No videos uploaded.";
+                        }
                     ?>
                 </li>
             </ul>

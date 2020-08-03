@@ -1,6 +1,17 @@
 <?php
 DEFINE('VERSION', '1.1');
 
+if(strtolower(ENVIRONMENT) == 'production')
+{
+    DEFINE('PROTOCOL', 'HTTPS://');
+}
+else
+{
+    DEFINE('PROTOCOL', 'HTTP://');
+}
+
+DEFINE('FQDN', PROTOCOL . $_SERVER['HTTP_HOST']);
+
 //Session variables
 DEFINE('IS_LOGGED_IN', 'isLoggedIn');
 DEFINE('USER', 'user');

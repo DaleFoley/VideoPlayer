@@ -1,5 +1,5 @@
-function loadSelectedVideo(element)
+function loadSelectedVideo(element, host)
 {
     let videoID = element.id;
-    $('video').attr('src', 'http://localhost:8000/videos/index/' + videoID);
+    $('video').attr('src', host + '/videos/index/' + videoID);
 }

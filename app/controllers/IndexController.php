@@ -46,7 +46,7 @@ class IndexController extends BaseController
                          alt=\"$videoFileName\"
                          class=\"img-thumbnail\"
                          id=\"$videoID\"
-                         onclick='loadSelectedVideo(this);'>";
+                         onclick=\"loadSelectedVideo(this, '" . FQDN . "');\">";
             }
         }
     }
