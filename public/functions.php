@@ -15,8 +15,20 @@ function createFileOrDirectoryIfNotExists($pathToFileOrDirectory, $mode = 0777, 
     $isFileOrDirectoryCreated = false;
     if(!file_exists($pathToFileOrDirectory))
     {
-        $lengthOfPathToFileOrDirectory = count($pathToFileOrDirectory);
-        $isFileOrDirectoryCreated = mkdir($pathToFileOrDirectory, $mode, $recursive);
+        $pathInfo = pathinfo($pathToFileOrDirectory);
+        $isFile = isset($pathInfo['extension']);
+
+        if($isFile)
+        {
+            $createdFile = fopen($pathToFileOrDirectory, 'w');
+            fclose($createdFile);
+
+            $isFileOrDirectoryCreated = true;
+        }
+        else
+        {
+            $isFileOrDirectoryCreated = mkdir($pathToFileOrDirectory, $mode, $recursive);
+        }
     }
 
     return $isFileOrDirectoryCreated;
@@ -24,7 +36,6 @@ function createFileOrDirectoryIfNotExists($pathToFileOrDirectory, $mode = 0777, 
 
 function extractFrameFromVideo($pathSourceVideo, $pathToExtractedImage, $frame, $dirLogs = "")
 {
-    //TODO: Check path exists, create if doesn't exist function.
     $isDirLogsEmpty = empty($dirLogs);
 
     if(PHP_OS === "Linux")
@@ -39,6 +50,9 @@ function extractFrameFromVideo($pathSourceVideo, $pathToExtractedImage, $frame, 
             $pathToErrorLogFile = PATH_FFMPEG_LINUX_ERROR_LOG;
             $pathToDebugLogFile = PATH_FFMPEG_LINUX_DEBUG_LOG;
         }
+
+        createFileOrDirectoryIfNotExists($pathToErrorLogFile);
+        createFileOrDirectoryIfNotExists($pathToDebugLogFile);
 
         $ffmpegCommand = PATH_FFMPEG_WINDOWS . " -i " . $pathSourceVideo . " -vf \"select=eq(n\,$frame)\" -vframes 1 " .
             $pathToExtractedImage . " </dev/null >> " . $pathToDebugLogFile . " 2>> " .
@@ -56,6 +70,9 @@ function extractFrameFromVideo($pathSourceVideo, $pathToExtractedImage, $frame, 
             $pathToErrorLogFile = PATH_FFMPEG_WINDOWS_ERROR_LOG;
             $pathToDebugLogFile = PATH_FFMPEG_WINDOWS_DEBUG_LOG;
         }
+
+        createFileOrDirectoryIfNotExists($pathToErrorLogFile);
+        createFileOrDirectoryIfNotExists($pathToDebugLogFile);
 
         $ffmpegCommand = "START /B CMD /C CALL " . PATH_FFMPEG_WINDOWS . " -i " . $pathSourceVideo .
             " -vf \"select=eq(n\,$frame)\" -vframes 1 " . $pathToExtractedImage .

@@ -39,3 +39,5 @@
 # *.ipr
 
 config.inc
+/vendor/
+/tmp/
