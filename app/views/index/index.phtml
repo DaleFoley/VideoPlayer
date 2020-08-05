@@ -1,6 +1,9 @@
 <?php if(!$this->session->get(IS_LOGGED_IN)): ?>
     <p>Login to view videos and modify your uploaded videos.</p>
 <?php else: ?>
+
+    <?php $this->assets->outputCss('css'); ?>
+
     <style type="text/css">
         .list-group{
             max-height: 800px;
@@ -13,7 +16,7 @@
     <p></p>
 
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-8">
             <div class="embed-responsive embed-responsive-16by9">
                 <video class="embed-responsive-item"
                        <?php echo 'src="' . FQDN . '/videos/index/0" controls>'; ?>
@@ -23,12 +26,11 @@
             <p></p>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <button type="button" class="mb-4 btn btn-primary btn-block"
                     onclick="window.location = '/videos/upload'">Upload</button>
 
             <ul class="list-group">
-                <li class="list-group-item">
                     <?php
                         //TODO: Implement volt templates.
                         if(isset($videosList))
@@ -40,7 +42,6 @@
                             echo "No videos uploaded.";
                         }
                     ?>
-                </li>
             </ul>
         </div>
     </div>

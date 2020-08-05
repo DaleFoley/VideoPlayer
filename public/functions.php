@@ -34,6 +34,11 @@ function createFileOrDirectoryIfNotExists($pathToFileOrDirectory, $mode = 0777, 
     return $isFileOrDirectoryCreated;
 }
 
+function removeFileSuffix($fileName)
+{
+    return pathinfo($fileName, PATHINFO_FILENAME);
+}
+
 function extractFrameFromVideo($pathSourceVideo, $pathToExtractedImage, $frame, $dirLogs = "")
 {
     $isDirLogsEmpty = empty($dirLogs);

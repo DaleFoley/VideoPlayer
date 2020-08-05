@@ -2,6 +2,7 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Assets\Asset\Js;
+use Phalcon\Assets\Asset\Css;
 
 class IndexController extends BaseController
 {
@@ -20,6 +21,17 @@ class IndexController extends BaseController
 
         $this->assets->addAssetByType('js', $customJS);
 
+        $customCSS = new Css(
+            '/css/views/index/card.css',
+            true,
+            false,
+            [],
+            VERSION,
+            false
+        );
+
+        $this->assets->addAssetByType('css', $customCSS);
+
         if($this->session->get(IS_LOGGED_IN))
         {
             $user = $this->session->get(USER);
@@ -32,7 +44,7 @@ class IndexController extends BaseController
             foreach ($userVideos as $userVideo)
             {
                 $videoID = $userVideo->id;
-                $videoFileName = $userVideo->name;
+                $videoFileName = removeFileSuffix($userVideo->name);
                 $videoThumbnail = $userVideo->thumbnail;
 
                 $pathVideoThumbnail = VIDEO_UPLOAD_DIRECTORY . $userID . "_" . $userName . THUMBNAILS_DIRECTORY .
@@ -41,12 +53,22 @@ class IndexController extends BaseController
                 $thumbnailContents = file_get_contents(BASE_PATH . $pathVideoThumbnail);
                 $thumbnailBase64Data = base64_encode($thumbnailContents);
 
-                //TODO: Get MIME type.
-                $this->view->videosList .= "<img src=\"data:image/png;base64, $thumbnailBase64Data\"
-                         alt=\"$videoFileName\"
-                         class=\"img-thumbnail\"
-                         id=\"$videoID\"
-                         onclick=\"loadSelectedVideo(this, '" . FQDN . "');\">";
+                //TODO: Get MIME type, replace extension with nothing.
+                $this->view->videosList .= "<li class=\"list-group-item\">
+        <div class=\"card-row-custom\">
+            <img src=\"data:image/png;base64, $thumbnailBase64Data\"
+                 alt=\"$videoFileName\"
+                 id=\"$videoID\"
+                 onclick=\"loadSelectedVideo(this, '" . FQDN . "');\"
+                 width=\"164\"
+                 height=\"90\">
+            <div class=\"card-body p-0\">
+                <h5 class=\"card-title-custom p-0\">$videoFileName</h5>
+                <h6 class=\"card-subtitle mb-2 text-muted\">2020-12-24 - View Count</h6>
+                <small class=\"card-text\">The author of the video.</small><br>
+            </div>
+        </div>
+    </li>";
             }
         }
     }

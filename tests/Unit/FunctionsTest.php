@@ -32,4 +32,16 @@ class FunctionsTest extends AbstractUnitTest
         $testInput = "testString";
         $this->assertTrue(startsWith($testInput, "test"));
     }
+
+    public function testReplace(): void
+    {
+        $fileA = "myFile.mp4";
+        $fileB = "myFile.mp4.mp4";
+
+        $fileAExpected = "myFile";
+        $fileBExpected = "myFile.mp4";
+
+        $this->assertTrue(removeFileSuffix($fileA) === $fileAExpected);
+        $this->assertTrue(removeFileSuffix($fileB) === $fileBExpected);
+    }
 }
