@@ -1,8 +1,15 @@
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(70) NOT NULL,
-  `email` varchar(70) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
+create table if not exists users
+(
+    id int unsigned auto_increment
+        primary key,
+    name varchar(255) not null,
+    email varchar(255) not null,
+    password text null,
+    isAccountActive tinyint(1) default 0 not null,
+    isEmailVerified tinyint(1) default 0 not null,
+    isTwoFactorAuthEnabled tinyint(1) default 0 not null,
+    constraint email_UNIQUE
+        unique (email),
+    constraint name_UNIQUE
+        unique (name)
 );
