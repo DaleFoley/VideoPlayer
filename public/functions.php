@@ -4,10 +4,63 @@ use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\AdapterFactory;
 use Phalcon\Logger\LoggerFactory;
 
+require_once 'Mail.php';
+
 function startsWith($haystack, $needle)
 {
     $length = strlen($needle);
     return (substr($haystack, 0, $length) === $needle);
+}
+
+function replaceStringTokens($stringToUpdate, $tokensToReplace, $tokenValues)
+{
+    $stringToUpdate = str_replace($tokensToReplace, $tokenValues, $stringToUpdate);
+    return $stringToUpdate;
+}
+
+function sendHTMLEmail($from, $to, $subject, $tokens, $emailTemplate)
+{
+    $emailFileHandle = fopen($emailTemplate, 'r');
+    $emailContent = fread($emailFileHandle, filesize($emailTemplate));
+
+    $tokensToReplace = array_keys($tokens);
+    $tokenValues = array_values($tokens);
+
+    $emailContent = replaceStringTokens($emailContent, $tokensToReplace, $tokenValues);
+
+    $recipients = $to;
+
+    $headers['From'] = $from;
+    $headers['To'] = $to;
+    $headers['Subject'] = $subject;
+    $headers['Content-Type'] = "text/html";
+
+    $body = $emailContent;
+
+    $params["host"] = MAIL_LOCALHOST;
+
+    $params["port"] = MAIL_PORT;
+
+    $params["auth"] = MAIL_AUTH;
+
+    $params["username"] = MAIL_USERNAME;
+
+    $params["password"] = MAIL_PASSWORD;
+
+    $params["localhost"] = MAIL_LOCALHOST;
+
+    $params["timeout"] = MAIL_TIMEOUT;
+
+    $params["verp"] = MAIL_VERP;
+
+    $params["debug"] = MAIL_DEBUG;
+
+    $params["persist"] = MAIL_PERSIST;
+
+    $params["pipelining"] = MAIL_PIPELINING;
+
+    $mail_object = Mail::factory('smtp', $params);
+    return $mail_object->send($recipients, $headers, $body);
 }
 
 function createFileOrDirectoryIfNotExists($pathToFileOrDirectory, $mode = 0777, $recursive = true)

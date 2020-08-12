@@ -20,6 +20,13 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/myclabs/deep-copy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pear/auth_sasl" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pear/console_getopt" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pear/mail" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pear/net_smtp" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pear/net_socket" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pear/pear-core-minimal" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pear/pear_exception" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phalcon/devtools" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phalcon/incubator-test" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phalcon/migrations" />

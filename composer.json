@@ -1,6 +1,9 @@
 {
   "require": {
-    "phalcon/devtools": "^4.0"
+    "phalcon/devtools": "^4.0",
+    "pear/mail": "v1.4.1",
+    "pear/net_smtp": "v1.9.1",
+    "pear/auth_sasl": "v1.1.0"
   },
 
   "require-dev": {
